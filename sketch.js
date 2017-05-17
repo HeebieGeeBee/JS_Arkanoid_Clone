@@ -13,28 +13,17 @@
 const paddle = new Paddle(250, 480, 50, 10);
 // new instance of Ball
 const ball = new Ball(paddle.x+10, paddle.y-(paddle.height/2 -1), 10, "grey");
-
+// holding array for tiles
 const tilesArr = [];
-
+// game is paused 
 let paused = false;
+// tile colors 
+let tileColors = ["gold" ,"silver", "red", "green", "orange", "blue", "purple",];
+// width and height varables
+let width = 500;
+let height = 500;
 
-let tileColors = [null,"red", "yellow", "green", "orange", "blue"];
 
-
-
-function tiles() {
-	let x = 0; let y = 70; let width = 50; let height = 25;
-	for(let i = 0; i < level1.length; i++) {
-		for(let j = 0; j < level1[i].length; j++) {
-			if(level1[i][j] > 0) {
-				tilesArr.push(new HitSquare(x,y,width,height,tileColors[level1[i][j]]));
-			}	
-			x += 50;
-		}
-		x = 0;
-		y += 25;	
-	}
-}
 
 /**************************/
 /*  P5.js Setup Function  */
@@ -44,9 +33,9 @@ function tiles() {
 function setup() {
 
 	// Create canvas
-	createCanvas(500, 500);
+	createCanvas(width, height);
 	
-	tiles();
+	tiles(level1);
 }
 
 /*************************/
@@ -64,7 +53,7 @@ function draw() {
 	ball.edges(paddle);
 	// Call ball show function
 	ball.show();
-
+	// draw hit tiles
 	tilesArr.forEach((val)=>val.show());
 	
 	// event listener for left arrow
@@ -91,19 +80,51 @@ function draw() {
 		ball.go();
 	}
 	// if ball goes below bounds reset the ball on paddle
-	if(ball.y > 500) {
-		ball.reset(paddle.x, paddle.y, paddle.height);
+	if(ball.y > paddle.y + paddle.height) {
+		ball.reset(paddle);
 		// decrease player lives
 		paddle.lives--;
 	}
 	
-	tilesArr.forEach((val, index)=>{
-		if(val.hit(ball)){
-			ball.speedY = 3;
-			tilesArr.splice(index, 1);
+	// call tile hit function
+	tileHitCheck(ball, tilesArr);
+
+}
+
+/*****************************/
+/*  Tile Generator Function  */
+/*___________________________*/
+
+function tiles(level) {
+	let x = 0; let y = 30; let tileWidth = width/level[0].length; let tileHeight = height/30;
+	level.forEach(row=> {
+		row.forEach(tile=> {
+			if(tile >= 0) {
+				tilesArr.push(new HitSquare(x,y,tileWidth,tileHeight,tileColors[tile], tile));
+			}
+			x += tileWidth;
+		})
+		x = 0;
+		y += tileHeight;
+	})
+}
+
+/*****************************/
+/*  Tile Hit Check Function  */
+/*___________________________*/
+
+function tileHitCheck(_ball, _tileArray) {
+	// loop through every tile
+	_tileArray.forEach((tile, index)=>{
+		// check if tile hit function returns true;
+		if(tile.hit(_ball)) {
+			// decrease tile health or remove from array
+			tile.health > 1 ? tile.health-- : tile.health === 0 ? tile : _tileArray.splice(index, 1);
+			//change ball direction
+			_ball.speedY = Math.abs(_ball.speedY);
+			
 		}
 	})
-
 }
 
 /*******************************/
@@ -116,7 +137,7 @@ function keyPressed() {
 		if ((keyCode === ENTER || keyCode === 32) && !ball.move) {
 			ball.move = true;
 		}
-
+		// Press P key to pause
 		if (keyCode === 80) {
 			if(paused) {
 				loop();	

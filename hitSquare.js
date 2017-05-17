@@ -1,12 +1,13 @@
 class HitSquare {
-	constructor(_x, _y, _width, _height, _color) {
+	constructor(_x, _y, _width, _height, _color, _id) {
 		//hit square variables
+		this.id = _id;
 		this.x = _x;
 		this.y = _y;
 		this.width = _width;
 		this.height = _height;
 		this.color = _color;
-		this.strength = 1;
+		this.health = this.id === 1 ? 2 : this.id === 0 ? 0 : 1;
 	}
 }
 HitSquare.prototype.show = function() {

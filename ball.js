@@ -37,10 +37,10 @@ class Ball {
 			}
 		}
 		// reset function to place ball back on paddle not moving;
-		this.reset = (_paddleX, _paddleY, _paddleHeight)=> {
+		this.reset = (_paddle)=> {
 			this.move = false;
-			this.x = _paddleX+10;
-			this.y = _paddleY-(_paddleHeight/2 -1);
+			this.x = _paddle.x +10;
+			this.y = _paddle.y -(_paddle.height/2 -1);
 			this.speedY = -3;
 			this.speedX = -3;
 		}
