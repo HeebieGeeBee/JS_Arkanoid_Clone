@@ -18,7 +18,7 @@ const tilesArr = [];
 // game is paused 
 let paused = false;
 // tile colors 
-let tileColors = ["gold" ,"silver", "red", "green", "orange", "blue", "purple",];
+let tileColors = ["gold" ,"silver", "red", "green", "blue", "purple",];
 // width and height varables
 let width = 500;
 let height = 500;
