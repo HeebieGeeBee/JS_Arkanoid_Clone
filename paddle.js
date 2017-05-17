@@ -9,10 +9,12 @@ class Paddle {
 		this.lives = 3;
 		this.speed = 4;
 		// show function to render paddle in canvas
-		this.show = ()=> { 
-			fill(this.color);
-			rect(this.x, this.y, this.width, this.height, 5, 5, 5, 5)
-		}
-
+		
 	}
+
+}
+
+Paddle.prototype.show = function() {
+	fill(this.color);
+	rect(this.x, this.y, this.width, this.height, 5, 5, 5, 5)
 }

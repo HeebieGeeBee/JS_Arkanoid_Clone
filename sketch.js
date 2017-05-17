@@ -96,7 +96,7 @@ function draw() {
 /*___________________________*/
 
 function tiles(level) {
-	let x = 0; let y = 30; let tileWidth = width/level[0].length; let tileHeight = height/30;
+	let x = 0; let y = 30; let tileWidth = width/level[0].length; let tileHeight = height/20;
 	level.forEach(row=> {
 		row.forEach(tile=> {
 			if(tile >= 0) {
@@ -121,7 +121,19 @@ function tileHitCheck(_ball, _tileArray) {
 			// decrease tile health or remove from array
 			tile.health > 1 ? tile.health-- : tile.health === 0 ? tile : _tileArray.splice(index, 1);
 			//change ball direction
-			_ball.speedY = Math.abs(_ball.speedY);
+			console.log(tile.hitFrom(_ball));
+			if (tile.hitFrom(_ball) === "TOP") {
+				_ball.speedY = -Math.abs(_ball.speedY);
+			}
+			if (tile.hitFrom(_ball) === "BOTTOM") {
+				_ball.speedY = Math.abs(_ball.speedY);
+			}
+			if (tile.hitFrom(_ball) === "LEFT") {
+				_ball.speedX = -Math.abs(_ball.speedX);
+			}
+			if (tile.hitFrom(_ball) === "RIGHT") {
+				_ball.speedX = Math.abs(_ball.speedX);
+			}
 			
 		}
 	})

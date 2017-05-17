@@ -20,7 +20,7 @@ class Ball {
 		}
 		// edge detection function to detect ball hitting passing in paddle variables
 		this.edges = (_paddle)=> {
-			let padQuarter = _paddle.width/4;
+			const padQuarter = _paddle.width/4;
 			// left wall bounds detection
 			if(this.x < 5) {this.speedX = Math.abs(this.speedX);}
 			// right wall bounds detection 
