@@ -14,6 +14,22 @@ const paddle = new Paddle(250, 480, 40, 10);
 // new instance of Ball
 const ball = new Ball(paddle.x+10, paddle.y-(paddle.height/2 -1), 10, "grey");
 
+const tilesArr = [];
+
+let paused = false;
+
+function tiles() {
+	let x = 0;
+	let y = 70;
+	let width = 50;
+	let height = 25;
+	let color = "red";
+	for(var i = 0; i < 11; i++) {
+		tilesArr.push(new HitSquare(x, y, width, height, color));
+		x += width;
+	}
+}
+
 /**************************/
 /*  P5.js Setup Function  */
 /*________________________*/
@@ -23,7 +39,8 @@ function setup() {
 
 	// Create canvas
 	createCanvas(500, 500);
-
+	
+	tiles();
 }
 
 /*************************/
@@ -41,6 +58,10 @@ function draw() {
 	ball.edges(paddle.x, paddle.y, paddle.width);
 	// Call ball show function
 	ball.show();
+
+	for(var i = 0; i < tilesArr.length; i++) {
+		tilesArr[i].show();
+	}
 	// event listener for left arrow
 	if(keyIsDown(LEFT_ARROW) && paddle.x > 5) {
 		//move paddle left
@@ -71,6 +92,12 @@ function draw() {
 		paddle.lives--;
 	}
 	
+	tilesArr.forEach((val, index)=>{
+		if(val.hit(ball)){
+			ball.speedY = 3;
+			tilesArr.splice(index, 1);
+		}
+	})
 
 }
 
@@ -84,4 +111,16 @@ function keyPressed() {
 		if ((keyCode === ENTER || keyCode === 32) && !ball.move) {
 			ball.move = true;
 		}
-	}
+
+		if (keyCode === 80) {
+			if(paused) {
+				loop();	
+				paused = false;
+			} else {
+				noLoop();
+				paused = true;
+			} 
+		}
+
+}
+
