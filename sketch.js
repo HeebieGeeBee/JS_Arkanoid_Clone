@@ -18,16 +18,36 @@ const tilesArr = [];
 
 let paused = false;
 
+let tileColors = [null,"red", "yellow", "green", "orange", "blue"];
+
+let levelMap = [
+
+[1,1,1,1,1,1,1,1,1,1],
+[2,2,2,2,0,0,2,2,2,2],
+[3,3,3,0,0,0,0,3,3,3],
+[4,4,4,4,0,0,4,4,4,4],
+[5,5,5,5,5,5,5,5,5,5],
+[1,1,1,1,1,1,1,1,1,1]
+
+];
+
 function tiles() {
 	let x = 0;
 	let y = 70;
 	let width = 50;
 	let height = 25;
-	let color = "red";
-	for(var i = 0; i < 11; i++) {
-		tilesArr.push(new HitSquare(x, y, width, height, color));
-		x += width;
+	for(let i = 0; i < levelMap.length; i++) {
+
+		for(let j = 0; j < levelMap[i].length; j++) {
+			if(levelMap[i][j] > 0) {
+				tilesArr.push(new HitSquare(x,y,width,height,tileColors[levelMap[i][j]]));
+			}	
+			x += 50;
+		}
+		x = 0;
+		y += 25;	
 	}
+	console.log(tilesArr.length);
 }
 
 /**************************/
@@ -59,9 +79,8 @@ function draw() {
 	// Call ball show function
 	ball.show();
 
-	for(var i = 0; i < tilesArr.length; i++) {
-		tilesArr[i].show();
-	}
+	tilesArr.forEach((val)=>val.show());
+	
 	// event listener for left arrow
 	if(keyIsDown(LEFT_ARROW) && paddle.x > 5) {
 		//move paddle left
