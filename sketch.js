@@ -10,7 +10,7 @@
 /*____________________*/
 
 // new instance of Paddle
-const paddle = new Paddle(250, 480, 40, 10);
+const paddle = new Paddle(250, 480, 50, 10);
 // new instance of Ball
 const ball = new Ball(paddle.x+10, paddle.y-(paddle.height/2 -1), 10, "grey");
 
@@ -20,34 +20,20 @@ let paused = false;
 
 let tileColors = [null,"red", "yellow", "green", "orange", "blue"];
 
-let levelMap = [
 
-[1,1,1,1,1,1,1,1,1,1],
-[2,2,2,2,0,0,2,2,2,2],
-[3,3,3,0,0,0,0,3,3,3],
-[4,4,4,4,0,0,4,4,4,4],
-[5,5,5,5,5,5,5,5,5,5],
-[1,1,1,1,1,1,1,1,1,1]
-
-];
 
 function tiles() {
-	let x = 0;
-	let y = 70;
-	let width = 50;
-	let height = 25;
-	for(let i = 0; i < levelMap.length; i++) {
-
-		for(let j = 0; j < levelMap[i].length; j++) {
-			if(levelMap[i][j] > 0) {
-				tilesArr.push(new HitSquare(x,y,width,height,tileColors[levelMap[i][j]]));
+	let x = 0; let y = 70; let width = 50; let height = 25;
+	for(let i = 0; i < level1.length; i++) {
+		for(let j = 0; j < level1[i].length; j++) {
+			if(level1[i][j] > 0) {
+				tilesArr.push(new HitSquare(x,y,width,height,tileColors[level1[i][j]]));
 			}	
 			x += 50;
 		}
 		x = 0;
 		y += 25;	
 	}
-	console.log(tilesArr.length);
 }
 
 /**************************/
@@ -75,7 +61,7 @@ function draw() {
 	// Call paddle show function
 	paddle.show();
 	// Call ball edges function
-	ball.edges(paddle.x, paddle.y, paddle.width);
+	ball.edges(paddle);
 	// Call ball show function
 	ball.show();
 

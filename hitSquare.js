@@ -7,20 +7,13 @@ class HitSquare {
 		this.height = _height;
 		this.color = _color;
 		this.strength = 1;
-		// show function to render hit sqaures
-		this.show = ()=> {
-			fill(this.color);
-			rect(this.x, this.y, this.width, this.height);
-		}
-
-		this.hit = (_ball)=> {
-
-			if (_ball.x > this.x && _ball.x < this.x + this.width && _ball.y > this.y && _ball.y < this.y + this.height) {
-				console.log('hit');
-				return true;
-			} 
-			return false;
-		}
 	}
+}
+HitSquare.prototype.show = function() {
+	fill(this.color);
+	rect(this.x, this.y, this.width, this.height, 5, 5, 5, 5);
+}
 
+HitSquare.prototype.hit = function(_ball) {
+	return (_ball.x > this.x && _ball.x < this.x + this.width && _ball.y > this.y && _ball.y < this.y + this.height)
 }

@@ -7,7 +7,7 @@ class Paddle {
 		this.height = _height || 5;
 		this.x = _x - this.width/2;
 		this.lives = 3;
-		this.speed = 3;
+		this.speed = 4;
 		// show function to render paddle in canvas
 		this.show = ()=> { 
 			fill(this.color);

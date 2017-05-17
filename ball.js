@@ -19,18 +19,21 @@ class Ball {
 			this.y += this.speedY;
 		}
 		// edge detection function to detect ball hitting passing in paddle variables
-		this.edges = (_paddleX, _paddleY, _paddleWidth)=> {
+		this.edges = (_paddle)=> {
+			let padQuarter = _paddle.width/4;
 			// left wall bounds detection
-			if(this.x < 5) {this.speedX = 3;}
+			if(this.x < 5) {this.speedX = Math.abs(this.speedX);}
 			// right wall bounds detection 
-			if(this.x > 495) {this.speedX = -3;}
+			if(this.x > 495) {this.speedX = -Math.abs(this.speedX);}
 			// ceiling bounds detection 
-			if(this.y < 5){ this.speedY = 3;}
+			if(this.y < 5){ this.speedY = Math.abs(this.speedY);}
 			// paddle hit detection 
-			if(this.x > _paddleX && this.x < _paddleX + _paddleWidth && this.y >= _paddleY - this.width/2) {
-				this.speedY = -3;
-				if(this.x > _paddleX + _paddleWidth/2) {this.speedX = 3;}
-				if(this.x < _paddleX + _paddleWidth/2) {this.speedX = -3;}
+			if(this.x > _paddle.x && this.x < _paddle.x + _paddle.width && this.y >= _paddle.y - this.width/2) {
+				this.speedY = -Math.abs(this.speedY);
+				if(this.x > _paddle.x + (padQuarter*2) && this.x < _paddle.x + (padQuarter*3)) {this.speedX = 3}
+				if(this.x > _paddle.x + (padQuarter*3) && this.x < _paddle.x + _paddle.width) {this.speedX = 4}
+				if(this.x < _paddle.x + (padQuarter*2) && this.x > _paddle.x + padQuarter) {this.speedX = -3;}
+				if(this.x > _paddle.x && this.x < _paddle.x + padQuarter) {this.speedX = -4;}
 			}
 		}
 		// reset function to place ball back on paddle not moving;
@@ -41,5 +44,6 @@ class Ball {
 			this.speedY = -3;
 			this.speedX = -3;
 		}
-	}
-}
+
+		}
+		} 
