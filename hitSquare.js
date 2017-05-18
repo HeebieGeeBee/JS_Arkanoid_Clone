@@ -11,7 +11,6 @@ class HitSquare {
 	}
 }
 HitSquare.prototype.show = function() {
-	noStroke();
 	fill(this.color);
 	rect(this.x, this.y, this.width, this.height, 1, 1, 1, 1);
 }
@@ -21,21 +20,23 @@ HitSquare.prototype.hit = function(_ball) {
 }
 
 HitSquare.prototype.hitFrom = function(_ball) {
-	if(_ball.x < this.x && _ball.y > this.y - _ball.radius && _ball.y < this.y + this.height + _ball.radius) {
+
+	if(_ball.x < this.x) {
 		_ball.speedX = -Math.abs(_ball.speedX);
 		return "LEFT";
 	}
-	if(_ball.x > this.x + this.width && _ball.y > this.y - _ball.radius && _ball.y < this.y + this.height + _ball.radius) {
+	if(_ball.x > this.x + this.width) {
 		_ball.speedX = Math.abs(_ball.speedX);
 		return "RIGHT";
 	}
-	if(_ball.y < this.y && _ball.x > this.x -_ball.radius && _ball.x < this.x + this.width + _ball.radius) {
+	if(_ball.y < this.y) {
 		_ball.speedY = -Math.abs(_ball.speedY); 
 		return "TOP";
 	}
-	if(_ball.y > this.y + this.height && _ball.x > this.x - _ball.radius && _ball.x < this.x + this.width + _ball.radius) {
+	if(_ball.y > this.y + this.height) {
 		_ball.speedY = Math.abs(_ball.speedY);
 		return "BOTTOM";
 	}
+
 
 }

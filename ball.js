@@ -16,7 +16,7 @@ class Ball {
 		}
 		// edge detection function to detect ball hitting passing in paddle variables
 		this.edges = (_paddle)=> {
-			const padQuarter = _paddle.width/4;
+			const sixth = _paddle.width/6;
 			// left wall bounds detection
 			if(this.x - this.radius < 1) {this.speedX = Math.abs(this.speedX);}
 			// right wall bounds detection 
@@ -24,12 +24,17 @@ class Ball {
 			// ceiling bounds detection 
 			if(this.y - this.radius < 1){ this.speedY = Math.abs(this.speedY);}
 			// paddle hit detection 
-			if(this.x - this.radius > _paddle.x && this.x + this.radius < _paddle.x + _paddle.width && this.y + this.radius >= _paddle.y) {
+			if(this.x + this.radius > _paddle.x && this.x - this.radius < _paddle.x + _paddle.width && this.y + this.radius >= _paddle.y && this.y + this.radius < _paddle.y + _paddle.height) {
+				if(this.move) {console.log('paddle' + this.x);};
 				this.speedY = -Math.abs(this.speedY);
-				if(this.x > _paddle.x + (padQuarter*2) && this.x < _paddle.x + (padQuarter*3)) {this.speedX = 3}
-				if(this.x > _paddle.x + (padQuarter*3) && this.x < _paddle.x + _paddle.width) {this.speedX = 4}
-				if(this.x < _paddle.x + (padQuarter*2) && this.x > _paddle.x + padQuarter) {this.speedX = -3;}
-				if(this.x > _paddle.x && this.x < _paddle.x + padQuarter) {this.speedX = -4;}
+				if(this.x + this.radius > _paddle.x + (sixth*3) && this.x + this.radius < _paddle.x + (sixth*4)) {this.speedX = 3; };
+				if(this.x + this.radius > _paddle.x + (sixth*4) && this.x + this.radius < _paddle.x + (sixth*5)) {this.speedX = 3.5; };
+				if(this.x + this.radius > _paddle.x + (sixth*5) && this.x + this.radius < _paddle.x + (sixth*6)) {this.speedX = 4; };
+				if(this.x + this.radius > _paddle.x + _paddle.width ) {this.speedX = 4.5; };	
+				if(this.x - this.radius < _paddle.x + (sixth*3) && this.x + this.radius > _paddle.x + (sixth*2)) {this.speedX = -3; }
+				if(this.x - this.radius < _paddle.x + (sixth*2) && this.x + this.radius > _paddle.x + (sixth)) {this.speedX = -3.5; }
+				if(this.x - this.radius < _paddle.x + sixth && this.x + this.radius > _paddle.x) {this.speedX = -4; }
+				if(this.x - this.radius < _paddle.x ) {this.speedX = -4.5; }
 			}
 		}
 		// reset function to place ball back on paddle not moving;

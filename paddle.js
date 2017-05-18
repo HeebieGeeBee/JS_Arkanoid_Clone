@@ -8,13 +8,12 @@ class Paddle {
 		this.x = _x - this.width/2;
 		this.lives = 3;
 		this.speed = 4;
-		// show function to render paddle in canvas
-		
 	}
 
 }
 
+// render paddle function
 Paddle.prototype.show = function() {
 	fill(this.color);
-	rect(this.x, this.y, this.width, this.height, 5, 5, 5, 5)
+	rect(this.x, this.y, this.width, this.height, 5, 5, 0, 0)
 }

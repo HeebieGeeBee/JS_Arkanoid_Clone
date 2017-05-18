@@ -11,10 +11,10 @@
 
 // new instance of Paddle
 const paddle = new Paddle(250, 480, 50, 10);
-// new instance of Ball
-const ball = new Ball(paddle.x+10, paddle.y-(paddle.height/2 -1), 10, "grey");
 // holding array for tiles
 const tilesArr = [];
+// holding array for balls;
+const balls = [];
 // game is paused 
 let paused = false;
 // tile colors 
@@ -34,8 +34,8 @@ function setup() {
 
 	// Create canvas
 	createCanvas(width, height);
+	start(level1);
 	
-	tiles(level1);
 }
 
 /*************************/
@@ -49,46 +49,33 @@ function draw() {
 	background(000); 
 	// Call paddle show function
 	paddle.show();
-	// Call ball edges function
-	ball.edges(paddle);
-	// Call ball show function
-	ball.show();
+	// Call balls show function and their edges;
+	balls.forEach((ball)=>{ball.show(); ball.edges(paddle);});
 	// draw hit tiles
-	tilesArr.forEach((val)=>val.show());
-	
-	// event listener for left arrow
-	if(keyIsDown(LEFT_ARROW) && paddle.x > 5) {
-		//move paddle left
-		paddle.x -= paddle.speed;
-		//if ball not moving and still on paddle move ball too
-		if(!ball.move) {
-			ball.x = paddle.x+10;
-		}
-	}
-	// event listener for right arrow
-	if(keyIsDown(RIGHT_ARROW) && paddle.x < 495-paddle.width) {
-		//move paddle right
-		paddle.x += paddle.speed;
-		//if ball not moving and still on paddle move ball too
-		if(!ball.move) {
-			ball.x = paddle.x+10;
-		}
-	}
-	// detect if ball move started
-	if(ball.move) {
-		// if yes call ball go function
-		ball.go();
-	}
-	// if ball goes below bounds reset the ball on paddle
-	if(ball.y > paddle.y + paddle.height) {
-		ball.reset(paddle);
-		// decrease player lives
-		paddle.lives--;
-	}
-	
+	tilesArr.forEach((tile)=>tile.show());
+	// Call keyDown listeners
+	keyDownListeners(...balls, paddle);
 	// call tile hit function
-	tileHitCheck(ball, tilesArr);
+	tileHitCheck(...balls, tilesArr);
 
+	if(paused) {
+		textSize(40);
+		textAlign(CENTER);
+		textFont("Arial");
+		fill('silver');
+		textStyle(BOLD);
+		text("PAUSED", width/2, height/2);
+	}
+
+}
+
+/*************************/
+/*  Game Start Function  */
+/*_______________________*/
+
+function start(_level) {
+	tiles(_level);
+	balls.push(new Ball(paddle.x+10, paddle.y-(paddle.height/2 -1), 10, "grey"));
 }
 
 /*****************************/
@@ -100,7 +87,7 @@ function tiles(level) {
 	level.forEach(row=> {
 		row.forEach(tile=> {
 			if(tile >= 0) {
-				tilesArr.push(new HitSquare(x,y,tileWidth,tileHeight,tileColors[tile], tile));
+				tilesArr.push(new HitSquare(x,y,tileWidth -1 ,tileHeight -1,tileColors[tile], tile));
 			}
 			x += tileWidth;
 		})
@@ -122,11 +109,52 @@ function tileHitCheck(_ball, _tileArray) {
 			// decrease tile health or remove from array
 			tile.health > 1 ? tile.health-- : tile.health === 0 ? tile : _tileArray.splice(index, 1);
 			//change ball direction
-			//console.log(tile.hitFrom(_ball), "ball x: " + ball.x, "ball y: " + ball.y, "square x: " + tile.x, "square y:" + tile.y, tile.width);
 			tile.hitFrom(_ball);
 		}
 	})
 }
+
+/*******************************/
+/*  KeyDown Listener Function  */
+/*_____________________________*/
+
+function keyDownListeners(_ball, _paddle) {
+
+		// event listener for left arrow
+	if(keyIsDown(LEFT_ARROW) && _paddle.x > 5) {
+		//move paddle left
+		_paddle.x -= _paddle.speed;
+		//if ball not moving and still on paddle move ball too
+		if(!_ball.move) {
+			_ball.x = _paddle.x+10;
+		}
+	}
+	// event listener for right arrow
+	if(keyIsDown(RIGHT_ARROW) && _paddle.x < 495 - _paddle.width) {
+		//move paddle right
+		_paddle.x += _paddle.speed;
+		//if ball not moving and still on paddle move ball too
+		if(!_ball.move) {
+			_ball.x = _paddle.x+10;
+		}
+	}
+	// detect if ball move started
+	if(_ball.move) {
+		// if yes call ball go function
+		_ball.go();
+	}
+	// if ball goes below bounds reset the ball on paddle
+	if(_ball.y > height) {
+		if(balls.length > 1) {
+			balls.splice(balls.indexOf(_ball), 1);
+		}
+		_ball.reset(_paddle);
+		// decrease player lives
+		_paddle.lives--;
+	}
+
+}
+
 
 /*******************************/
 /*  P5.js KeyPressed Function  */
@@ -135,8 +163,8 @@ function tileHitCheck(_ball, _tileArray) {
 function keyPressed() {      
 		
 		// Press enter of space to start ball moving
-		if ((keyCode === ENTER || keyCode === 32) && !ball.move) {
-			ball.move = true;
+		if ((keyCode === ENTER || keyCode === 32) && !balls[0].move) {
+			balls[0].move = true;
 		}
 		// Press P key to pause
 		if (keyCode === 80) {
