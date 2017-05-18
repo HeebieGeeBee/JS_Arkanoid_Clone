@@ -12,7 +12,7 @@ class HitSquare {
 }
 HitSquare.prototype.show = function() {
 	fill(this.color);
-	rect(this.x, this.y, this.width, this.height, 1, 1, 1, 1);
+	rect(this.x, this.y, this.width, this.height);
 }
 
 HitSquare.prototype.hit = function(_ball) {

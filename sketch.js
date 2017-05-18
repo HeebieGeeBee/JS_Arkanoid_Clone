@@ -20,7 +20,7 @@ let paused = false;
 // tile colors 
 let tileColors = ["gold" ,"silver", "red", "green", "blue", "purple",];
 // width and height varables
-let width = 500;
+let width = 490;
 let height = 500;
 
 
@@ -105,7 +105,7 @@ function tiles(level) {
 	level.forEach(row=> {
 		row.forEach(tile=> {
 			if(tile >= 0) {
-				tilesArr.push(new HitSquare(x,y,tileWidth -1 ,tileHeight -1,tileColors[tile], tile));
+				tilesArr.push(new HitSquare(x,y,tileWidth,tileHeight,tileColors[tile], tile));
 			}
 			x += tileWidth;
 		})
