@@ -8,11 +8,7 @@ class Ball {
 		this.speedY = -3;
 		this.speedX = -3;
 		this.move = false;
-		// show function to render ball to canvas
-		this.show = ()=> {
-			fill(this.color);
-			ellipse(this.x, this.y, this.width);
-		}
+		this.radius = this.width/2
 		// go function to start ball moving
 		this.go = ()=> {
 			this.x += this.speedX;
@@ -22,13 +18,13 @@ class Ball {
 		this.edges = (_paddle)=> {
 			const padQuarter = _paddle.width/4;
 			// left wall bounds detection
-			if(this.x < 5) {this.speedX = Math.abs(this.speedX);}
+			if(this.x - this.radius < 1) {this.speedX = Math.abs(this.speedX);}
 			// right wall bounds detection 
-			if(this.x > 495) {this.speedX = -Math.abs(this.speedX);}
+			if(this.x + this.radius > width -1) {this.speedX = -Math.abs(this.speedX);}
 			// ceiling bounds detection 
-			if(this.y < 5){ this.speedY = Math.abs(this.speedY);}
+			if(this.y - this.radius < 1){ this.speedY = Math.abs(this.speedY);}
 			// paddle hit detection 
-			if(this.x > _paddle.x && this.x < _paddle.x + _paddle.width && this.y >= _paddle.y - this.width/2) {
+			if(this.x - this.radius > _paddle.x && this.x + this.radius < _paddle.x + _paddle.width && this.y + this.radius >= _paddle.y) {
 				this.speedY = -Math.abs(this.speedY);
 				if(this.x > _paddle.x + (padQuarter*2) && this.x < _paddle.x + (padQuarter*3)) {this.speedX = 3}
 				if(this.x > _paddle.x + (padQuarter*3) && this.x < _paddle.x + _paddle.width) {this.speedX = 4}
@@ -45,5 +41,16 @@ class Ball {
 			this.speedX = -3;
 		}
 
+		this.ballBounds = (_tile)=> {
+			console.log( Math.sqrt((this.x - _tile.x) * (this.x - _tile.x) + (this.y - _tile.y) * (this.y - _tile.y)) < this.width/2);
 		}
-		} 
+
+	}
+	
+} 
+
+// show function to render ball to canvas
+Ball.prototype.show = function() {
+	fill(this.color);
+	ellipse(this.x, this.y, this.width);
+}

@@ -117,11 +117,12 @@ function tileHitCheck(_ball, _tileArray) {
 	// loop through every tile
 	_tileArray.forEach((tile, index)=>{
 		// check if tile hit function returns true;
+
 		if(tile.hit(_ball)) {
 			// decrease tile health or remove from array
 			tile.health > 1 ? tile.health-- : tile.health === 0 ? tile : _tileArray.splice(index, 1);
 			//change ball direction
-			console.log(tile.hitFrom(_ball), "ball x: " + ball.x, "ball y: " + ball.y, "square x: " + tile.x, "square y:" + tile.y, tile.width);
+			//console.log(tile.hitFrom(_ball), "ball x: " + ball.x, "ball y: " + ball.y, "square x: " + tile.x, "square y:" + tile.y, tile.width);
 			tile.hitFrom(_ball);
 		}
 	})
