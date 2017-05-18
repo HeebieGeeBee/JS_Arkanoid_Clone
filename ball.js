@@ -5,8 +5,10 @@ class Ball {
 		this.y = _y;
 		this.width = _width;
 		this.color = _color || "white";
-		this.speedY = -3;
-		this.speedX = -3;
+		this.angle;
+		this.speed = 4;
+		this.speedY;
+		this.speedX;
 		this.move = false;
 		this.radius = this.width/2
 		// go function to start ball moving
@@ -26,15 +28,10 @@ class Ball {
 			// paddle hit detection 
 			if(this.x + this.radius > _paddle.x && this.x - this.radius < _paddle.x + _paddle.width && this.y + this.radius >= _paddle.y && this.y + this.radius < _paddle.y + _paddle.height) {
 				//change angle ball travels depending on what part of the paddle is hit
-				this.speedY = -Math.abs(this.speedY);
-				if(this.x + this.radius > _paddle.x + (sixth*3) && this.x + this.radius < _paddle.x + (sixth*4)) {this.speedX = 3; };
-				if(this.x + this.radius > _paddle.x + (sixth*4) && this.x + this.radius < _paddle.x + (sixth*5)) {this.speedX = 3.5; };
-				if(this.x + this.radius > _paddle.x + (sixth*5) && this.x + this.radius < _paddle.x + (sixth*6)) {this.speedX = 4; };
-				if(this.x + this.radius > _paddle.x + _paddle.width ) {this.speedX = 4.5; };	
-				if(this.x - this.radius < _paddle.x + (sixth*3) && this.x + this.radius > _paddle.x + (sixth*2)) {this.speedX = -3; }
-				if(this.x - this.radius < _paddle.x + (sixth*2) && this.x + this.radius > _paddle.x + (sixth)) {this.speedX = -3.5; }
-				if(this.x - this.radius < _paddle.x + sixth && this.x + this.radius > _paddle.x) {this.speedX = -4; }
-				if(this.x - this.radius < _paddle.x ) {this.speedX = -4.5; }
+				let diff = this.x - (_paddle.x + _paddle.width);
+				let angle = map(diff, 0, _paddle.width, -radians(45), radians(45));
+				this.speedX = this.speed * cos(angle);
+				this.speedY = this.speed * sin(angle);
 			}
 		}
 		// reset function to place ball back on paddle not moving;
