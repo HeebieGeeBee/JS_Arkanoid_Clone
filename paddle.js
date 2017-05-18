@@ -17,3 +17,11 @@ Paddle.prototype.show = function() {
 	fill(this.color);
 	rect(this.x, this.y, this.width, this.height, 5, 5, 0, 0)
 }
+
+Paddle.prototype.showLives = function() {
+	let x = 5, y = 5, width = 10, height = 5
+	for(let i = 1; i <= this.lives; i++) {
+		fill(this.color);
+		rect(5 * i * 2, y, width, height, 2, 2, 0, 0);
+	}
+}

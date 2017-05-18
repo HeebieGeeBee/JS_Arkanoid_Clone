@@ -25,7 +25,7 @@ class Ball {
 			if(this.y - this.radius < 1){ this.speedY = Math.abs(this.speedY);}
 			// paddle hit detection 
 			if(this.x + this.radius > _paddle.x && this.x - this.radius < _paddle.x + _paddle.width && this.y + this.radius >= _paddle.y && this.y + this.radius < _paddle.y + _paddle.height) {
-				if(this.move) {console.log('paddle' + this.x);};
+				//change angle ball travels depending on what part of the paddle is hit
 				this.speedY = -Math.abs(this.speedY);
 				if(this.x + this.radius > _paddle.x + (sixth*3) && this.x + this.radius < _paddle.x + (sixth*4)) {this.speedX = 3; };
 				if(this.x + this.radius > _paddle.x + (sixth*4) && this.x + this.radius < _paddle.x + (sixth*5)) {this.speedX = 3.5; };

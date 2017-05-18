@@ -10,7 +10,7 @@
 /*____________________*/
 
 // new instance of Paddle
-const paddle = new Paddle(250, 480, 50, 10);
+let paddle;
 // holding array for tiles
 const tilesArr = [];
 // holding array for balls;
@@ -49,15 +49,18 @@ function draw() {
 	background(000); 
 	// Call paddle show function
 	paddle.show();
+	paddle.showLives();
 	// Call balls show function and their edges;
 	balls.forEach((ball)=>{ball.show(); ball.edges(paddle);});
 	// draw hit tiles
 	tilesArr.forEach((tile)=>tile.show());
+	
 	// Call keyDown listeners
 	keyDownListeners(...balls, paddle);
+	if(tilesArr.length !== 0) {
 	// call tile hit function
 	tileHitCheck(...balls, tilesArr);
-
+	}
 	if(paused) {
 		textSize(40);
 		textAlign(CENTER);
@@ -67,6 +70,16 @@ function draw() {
 		text("PAUSED", width/2, height/2);
 	}
 
+	if(paddle.lives === 0) {
+		textSize(40);
+		textAlign(CENTER);
+		textFont("Arial");
+		fill('silver');
+		textStyle(BOLD);
+		text("GAMEOVER", width/2, height/2);
+		noLoop();
+	}
+
 }
 
 /*************************/
@@ -74,8 +87,13 @@ function draw() {
 /*_______________________*/
 
 function start(_level) {
-	tiles(_level);
+	tilesArr.splice(0);
+	balls.splice(0);
+	paused = false;
+	paddle = new Paddle(250, 480, 50, 10);
 	balls.push(new Ball(paddle.x+10, paddle.y-(paddle.height/2 -1), 10, "grey"));
+	tiles(_level);
+	loop();
 }
 
 /*****************************/
@@ -176,6 +194,9 @@ function keyPressed() {
 				paused = true;
 			} 
 		}
-
+		// Press S to start
+		if(keyCode === 83) {
+			start(level1);
+		}
 }
 
