@@ -83,7 +83,7 @@ function draw() {
 		text("PAUSED", width/2, height/2);
 	}
 
-	if(paddle.lives < 0) {
+	if(paddle.lives < 0 || tilesArr.length === 0) {
 		textSize(40);
 		textAlign(CENTER);
 		textFont("Arial");
