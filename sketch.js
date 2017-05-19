@@ -21,12 +21,14 @@ let paused = false;
 let tileColors = ["gold" ,"silver", "red", "green", "blue", "purple",];
 // width and height varables
 let width = 500;
-let height = 500;
+let height = 700;
 // hit sound
 let hitSound;
 let bounceSound;
 let lifeSound;
 let touchstart = false;
+let rightDown = false;
+let leftDown = false;
 let left;
 let right;
 /****************************/
@@ -100,15 +102,47 @@ function draw() {
 		},100)
 		
 	}
-
+	drawControls();
 	controls(...balls, paddle);
 
 }
 
-function controls(_ball, _paddle) {
+/****************************/
+/*  Draw Controls Function  */
+/*__________________________*/
 
-	
-	if((mouseIsPressed || touchstart) && mouseX < width/2 && _paddle.x > 5) {
+function drawControls() {
+	noFill();
+	stroke('silver');
+	strokeWeight(5);
+	ellipse(width/4 - 20, height-100, 160);
+	strokeWeight(2);
+	textAlign(CENTER);
+	textSize(45);
+	text("LEFT", width/4 - 20, height-85);
+	strokeWeight(5);
+	ellipse(width/4 * 3 + 20, height-100, 160);
+	strokeWeight(2);
+	textAlign(CENTER);
+	textSize(45);
+	text("RIGHT", width/4 * 3 + 20, height-85);
+	strokeWeight(2);
+	ellipse(width/2, height-100, 80);
+	strokeWeight(2);
+	textAlign(CENTER);
+	textSize(20);
+	text("START", width/2, height-92);
+}
+
+
+/***********************************************/
+/*  Onscreen Mouse and Touch Control Function  */
+/*_____________________________________________*/
+
+
+function controls(_ball, _paddle) {
+	// if mouse pressed or touch started and within range of left control	
+	if((mouseIsPressed || touchstart) && mouseX < width/4 + 60 && _paddle.x > 5 && mouseY > 500) {
 		//move paddle left
 		_paddle.x -= _paddle.speed;
 		//if ball not moving and still on paddle move ball too
@@ -117,7 +151,8 @@ function controls(_ball, _paddle) {
 		
 		}
 	}
-	if((mouseIsPressed || touchstart) && mouseX > width/2 && _paddle.x < 495 - _paddle.width) {
+	// if mouse pressed or touch started and with range of right control
+	if((mouseIsPressed || touchstart) && mouseX > width/4 * 3 - 60 && _paddle.x < 495 - _paddle.width && mouseY > 500) {
 		//move paddle right
 		_paddle.x += _paddle.speed;
 		//if ball not moving and still on paddle move ball too
@@ -125,18 +160,28 @@ function controls(_ball, _paddle) {
 			_ball.x = _paddle.x+10;
 		}
 	}
+	// if mouse pressed or touch started with in range of start button
+	if((mouseIsPressed || touchstart) && mouseX < width/2 + 40 && mouseX > width/2 - 40 && mouseY > height - 140 && mouseY < height - 60) {
+		//set ball move to true 
+		_ball.move = true;
+	}
+
 }
 
-function touchStarted() {
+/*******************************/
+/*  Touch Detection Functions  */
+/*_____________________________*/
 
+function touchStarted() {
+	//if touch started set touchstart variable to true
 	touchstart = true;
-	console.log('started');
 }
 
 function touchEnded() {
+	//if touch ended set touchstart variable to false 
 	touchstart = false;
-	console.log('ended');
 }
+
 
 /*************************/
 /*  Game Start Function  */
@@ -146,7 +191,7 @@ function start(_level) {
 	tilesArr.splice(0);
 	balls.splice(0);
 	paused = false;
-	paddle = new Paddle(width/2, height - 40 , 50, 10);
+	paddle = new Paddle(width/2, height - 240 , 50, 10);
 	balls.push(new Ball(paddle.x+10, paddle.y-(paddle.height/2 -1), 10, "grey", bounceSound));
 	tiles(_level);
 	loop();
@@ -157,7 +202,7 @@ function start(_level) {
 /*___________________________*/
 
 function tiles(level) {
-	let x = 5; let y = 50; let tileWidth = (width-10)/level[0].length; let tileHeight = height/30;
+	let x = 5; let y = 50; let tileWidth = (width-10)/level[0].length; let tileHeight = (height-200)/30;
 	level.forEach(row=> {
 		row.forEach(tile=> {
 			if(tile >= 0) {
