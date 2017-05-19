@@ -26,7 +26,7 @@ let height = 500;
 let hitSound;
 let bounceSound;
 let lifeSound;
-let mousedown = false;
+let touchstart = false;
 let left;
 let right;
 /****************************/
@@ -108,8 +108,7 @@ function draw() {
 function controls(_ball, _paddle) {
 
 	
-	if(mouseIsPressed && mouseX < width/2 && _paddle.x > 5) {
-		console.log('leftpressed');
+	if((mouseIsPressed || touchstart) && mouseX < width/2 && _paddle.x > 5) {
 		//move paddle left
 		_paddle.x -= _paddle.speed;
 		//if ball not moving and still on paddle move ball too
@@ -118,8 +117,7 @@ function controls(_ball, _paddle) {
 		
 		}
 	}
-	if(mouseIsPressed && mouseX > width/2 && _paddle.x < 495 - _paddle.width) {
-		console.log('rightpressed');
+	if((mouseIsPressed || touchstart) && mouseX > width/2 && _paddle.x < 495 - _paddle.width) {
 		//move paddle right
 		_paddle.x += _paddle.speed;
 		//if ball not moving and still on paddle move ball too
@@ -129,7 +127,16 @@ function controls(_ball, _paddle) {
 	}
 }
 
+function touchStarted() {
 
+	touchstart = true;
+	console.log('started');
+}
+
+function touchEnded() {
+	touchstart = false;
+	console.log('ended');
+}
 
 /*************************/
 /*  Game Start Function  */
