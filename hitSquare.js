@@ -11,21 +11,41 @@ class HitSquare {
 	}
 }
 HitSquare.prototype.show = function() {
+	strokeWeight(1);
+	stroke("black");
 	fill(this.color);
-	rect(this.x, this.y, this.width, this.height);
+	rect(this.x, this.y, this.width, this.height, 2, 2, 2, 2);
 }
 
 HitSquare.prototype.hit = function(_ball) {
-	return (_ball.x + _ball.radius > this.x && _ball.x - _ball.radius < this.x + this.width && _ball.y + _ball.radius > this.y && _ball.y - _ball.radius < this.y + this.height)
+
+	// define vertical and horizontal distances between the ball and the square
+	let distX = Math.abs(_ball.x - this.x - this.width/2  );
+	let distY = Math.abs(_ball.y - this.y - this.height/2  );
+	// if distance is greater return false
+	if ( distX > (this.width/2 + _ball.radius) ) { return false; };
+	if ( distY > (this.height/2 + _ball.radius) ) { return false; };
+	// if distance is less return true they've collidied;
+	if ( distX < (this.width/2 + _ball.radius) ) { return true; };
+	if ( distY < (this.height/2 + _ball.radius) ) { return true; };
+	// if distance is less than half squares height of width return true
+	if ( distX <= this.width/2 ) { return true; };
+	if ( distY <= this.height/2 ) { return true; };
+	// Pythagoras formula for square corner collision
+	let dx = distX - this.width/2;
+	let dy = distY - this.height/2;
+	return ( dx*dx + dy*dy <= ( _ball.radius * _ball.radius ) );
+
 }
 
 HitSquare.prototype.hitFrom = function(_ball) {
 
-	if(_ball.x < this.x) {
+	// detect what direction the ball was hit from 
+	if(_ball.x < this.x && _ball.y > this.y && _ball.y < this.y + this.height) {
 		_ball.speedX = -Math.abs(_ball.speedX);
 		return "LEFT";
 	}
-	if(_ball.x > this.x + this.width) {
+	if(_ball.x > this.x + this.width && _ball.y > this.y && _ball.y < this.y + this.height) {
 		_ball.speedX = Math.abs(_ball.speedX);
 		return "RIGHT";
 	}

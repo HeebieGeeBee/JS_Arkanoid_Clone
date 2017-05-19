@@ -20,10 +20,23 @@ let paused = false;
 // tile colors 
 let tileColors = ["gold" ,"silver", "red", "green", "blue", "purple",];
 // width and height varables
-let width = 490;
+let width = 500;
 let height = 500;
+// hit sound
+let hitSound;
+let bounceSound;
+let lifeSound;
 
+/****************************/
+/*  P5.js Preload Function  */
+/*__________________________*/
 
+function preload() {
+	hitSound = loadSound('sounds/NFF-tiny-select-02.wav');
+	bounceSound = loadSound('sounds/NFF-switch-on.wav');
+	lifeSound = loadSound('sounds/NFF-lose.wav');
+
+}
 
 /**************************/
 /*  P5.js Setup Function  */
@@ -35,7 +48,6 @@ function setup() {
 	// Create canvas
 	createCanvas(width, height);
 	start(level1);
-	
 }
 
 /*************************/
@@ -49,18 +61,19 @@ function draw() {
 	background(000); 
 	// Call paddle show function
 	paddle.show();
+	// Call Player lives show function
 	paddle.showLives();
 	// Call balls show function and their edges;
 	balls.forEach((ball)=>{ball.show(); ball.edges(paddle);});
 	// draw hit tiles
 	tilesArr.forEach((tile)=>tile.show());
-	
 	// Call keyDown listeners
 	keyDownListeners(...balls, paddle);
-	if(tilesArr.length !== 0) {
+
+	//if(tilesArr.length !== 0) {
 	// call tile hit function
-	tileHitCheck(...balls, tilesArr);
-	}
+	tileHitCheck(...balls, tilesArr, hitSound);
+//	}
 	if(paused) {
 		textSize(40);
 		textAlign(CENTER);
@@ -70,13 +83,14 @@ function draw() {
 		text("PAUSED", width/2, height/2);
 	}
 
-	if(paddle.lives === 0) {
+	if(paddle.lives < 0) {
 		textSize(40);
 		textAlign(CENTER);
 		textFont("Arial");
 		fill('silver');
 		textStyle(BOLD);
 		text("GAMEOVER", width/2, height/2);
+		text("Press S to Restart", width/2, height/2 + 40);
 		noLoop();
 	}
 
@@ -91,7 +105,7 @@ function start(_level) {
 	balls.splice(0);
 	paused = false;
 	paddle = new Paddle(250, 480, 50, 10);
-	balls.push(new Ball(paddle.x+10, paddle.y-(paddle.height/2 -1), 10, "grey"));
+	balls.push(new Ball(paddle.x+10, paddle.y-(paddle.height/2 -1), 10, "grey", bounceSound));
 	tiles(_level);
 	loop();
 }
@@ -101,7 +115,7 @@ function start(_level) {
 /*___________________________*/
 
 function tiles(level) {
-	let x = 0; let y = 50; let tileWidth = width/level[0].length; let tileHeight = height/30;
+	let x = 5; let y = 50; let tileWidth = (width-10)/level[0].length; let tileHeight = height/30;
 	level.forEach(row=> {
 		row.forEach(tile=> {
 			if(tile >= 0) {
@@ -109,7 +123,7 @@ function tiles(level) {
 			}
 			x += tileWidth;
 		})
-		x = 0;
+		x = 5;
 		y += tileHeight;
 	})
 }
@@ -118,12 +132,12 @@ function tiles(level) {
 /*  Tile Hit Check Function  */
 /*___________________________*/
 
-function tileHitCheck(_ball, _tileArray) {
+function tileHitCheck(_ball, _tileArray, _hitSound) {
 	// loop through every tile
 	_tileArray.forEach((tile, index)=>{
-		// check if tile hit function returns true;
-
+		// check if tile hit function returns true
 		if(tile.hit(_ball)) {
+			_hitSound.play();
 			// decrease tile health or remove from array
 			tile.health > 1 ? tile.health-- : tile.health === 0 ? tile : _tileArray.splice(index, 1);
 			//change ball direction
@@ -169,6 +183,7 @@ function keyDownListeners(_ball, _paddle) {
 		_ball.reset(_paddle);
 		// decrease player lives
 		_paddle.lives--;
+		lifeSound.play();
 	}
 
 }
