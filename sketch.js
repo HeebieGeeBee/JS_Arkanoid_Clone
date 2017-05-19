@@ -121,9 +121,13 @@ function draw() {
 
 	drawControls();
 }
-	
-	
-	
+/*	
+window.onresize = function() {
+	width = window.innerHeight/1.77;
+	height =window.innerHeight;
+	resizeCanvas(width, height);
+}	
+*/	
 /****************************/
 /*  Draw Controls Function  */
 /*__________________________*/
@@ -165,6 +169,7 @@ function drawControls() {
 /*_____________________________*/
 
 function touchStarted() {
+	touchstart = true;
 	
 		// if mouse pressed or touch started and within range of left control	
 		if(mouseX < (width/4) + (width/6) && paddle.x > width/100 && mouseY > height-(height/7) - (width/6) ) {
@@ -216,7 +221,7 @@ function touchStarted() {
 }
 
 function touchEnded() {
-
+	touchstart = false;
 }
 
 
@@ -307,7 +312,7 @@ function keyDownListeners(_ball, _paddle) {
 		lifeSound.play();
 	}
 
-	if(mouseIsPressed && mouseX < (width/4) + (width/6) && _paddle.x > width/100 && mouseY > height-(height/7) - (width/6) ) {
+	if((mouseIsPressed || touchstart) && mouseX < (width/4) + (width/6) && _paddle.x > width/100 && mouseY > height-(height/7) - (width/6) ) {
 		//move paddle left
 		_paddle.x -= _paddle.speed;
 		//if ball not moving and still on paddle move ball too
@@ -316,7 +321,7 @@ function keyDownListeners(_ball, _paddle) {
 		}
 	}
 	// if mouse pressed or touch started and with range of right control
-	if(mouseIsPressed && mouseX > (width/4 * 3) - (width/6) && _paddle.x < width - _paddle.width - width/100 && mouseY > height-(height/7) - (width/6) ) {
+	if((mouseIsPressed || touchstart) && mouseX > (width/4 * 3) - (width/6) && _paddle.x < width - _paddle.width - width/100 && mouseY > height-(height/7) - (width/6) ) {
 		//move paddle right
 		_paddle.x += _paddle.speed;
 		//if ball not moving and still on paddle move ball too
@@ -325,7 +330,7 @@ function keyDownListeners(_ball, _paddle) {
 		}
 	}
 	// if mouse pressed or touch started with in range of start button
-	if(mouseIsPressed && mouseX < width/2 + width/16 && mouseX > width/2 - width/16 && mouseY > height - 140 && mouseY < height - 60) {
+	if((mouseIsPressed || touchstart) && mouseX < width/2 + width/16 && mouseX > width/2 - width/16 && mouseY > height - 140 && mouseY < height - 60) {
 		//set ball move to true 
 		_ball.move = true;
 		running = true;
