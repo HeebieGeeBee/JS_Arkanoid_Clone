@@ -1,4 +1,4 @@
-class HitSquare {
+class HitTile {
 	constructor(_x, _y, _width, _height, _color, _id) {
 		//hit square variables
 		this.id = _id;
@@ -10,14 +10,16 @@ class HitSquare {
 		this.health = this.id === 1 ? 2 : this.id === 0 ? 0 : 1;
 	}
 }
-HitSquare.prototype.show = function() {
+
+// show function to draw square instances
+HitTile.prototype.show = function() {
 	strokeWeight(1);
 	stroke("black");
 	fill(this.color);
 	rect(this.x, this.y, this.width, this.height, 2, 2, 2, 2);
 }
 
-HitSquare.prototype.hit = function(_ball) {
+HitTile.prototype.hit = function(_ball) {
 
 	// define vertical and horizontal distances between the ball and the square
 	let distX = Math.abs(_ball.x - this.x - this.width/2  );
@@ -38,7 +40,7 @@ HitSquare.prototype.hit = function(_ball) {
 
 }
 
-HitSquare.prototype.hitFrom = function(_ball) {
+HitTile.prototype.hitFrom = function(_ball) {
 
 	// detect what direction the ball was hit from 
 	if(_ball.x < this.x && _ball.y > this.y && _ball.y < this.y + this.height) {

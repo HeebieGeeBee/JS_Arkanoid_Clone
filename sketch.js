@@ -26,7 +26,9 @@ let height = 500;
 let hitSound;
 let bounceSound;
 let lifeSound;
-
+let mousedown = false;
+let left;
+let right;
 /****************************/
 /*  P5.js Preload Function  */
 /*__________________________*/
@@ -47,7 +49,10 @@ function setup() {
 
 	// Create canvas
 	createCanvas(width, height);
+	
+	//let controls = createCanvas(width, height/5);
 	start(level1);
+	controls(paddle, ...balls)
 }
 
 /*************************/
@@ -69,11 +74,9 @@ function draw() {
 	tilesArr.forEach((tile)=>tile.show());
 	// Call keyDown listeners
 	keyDownListeners(...balls, paddle);
-
-	//if(tilesArr.length !== 0) {
-	// call tile hit function
+	// Call tile hit check functions
 	tileHitCheck(...balls, tilesArr, hitSound);
-//	}
+	
 	if(paused) {
 		textSize(40);
 		textAlign(CENTER);
@@ -84,17 +87,46 @@ function draw() {
 	}
 
 	if(paddle.lives < 0 || tilesArr.length === 0) {
-		textSize(40);
-		textAlign(CENTER);
-		textFont("Arial");
-		fill('silver');
-		textStyle(BOLD);
-		text("GAMEOVER", width/2, height/2);
-		text("Press S to Restart", width/2, height/2 + 40);
-		noLoop();
+		setTimeout(function() {
+			textSize(40);
+			textAlign(CENTER);
+			textFont("Arial");
+			fill('silver');
+			textStyle(BOLD);
+			text("GAMEOVER", width/2, height/2);
+			text("Press S to Restart", width/2, height/2 + 40);
+			noLoop();
+		},100)
+		
 	}
 
 }
+
+function controls(_paddle, _ball) {
+
+	document.getElementById("left").addEventListener("mousedown", function(){
+		mousedown = true;
+		//move paddle left
+		console.log('leftclick')
+		_paddle.x -= _paddle.speed;
+		//if ball not moving and still on paddle move ball too
+		if(!_ball.move) {
+			_ball.x = _paddle.x+10;
+		}
+	})
+	document.getElementById("right").addEventListener("mousedown", function(){
+		mousedown = true;
+		console.log('rightclick');
+		//move paddle right
+		_paddle.x += _paddle.speed;
+		//if ball not moving and still on paddle move ball too
+		if(!_ball.move) {
+			_ball.x = _paddle.x+10;
+		}
+	})
+}
+
+
 
 /*************************/
 /*  Game Start Function  */
@@ -104,7 +136,7 @@ function start(_level) {
 	tilesArr.splice(0);
 	balls.splice(0);
 	paused = false;
-	paddle = new Paddle(250, 480, 50, 10);
+	paddle = new Paddle(width/2, height - 40 , 50, 10);
 	balls.push(new Ball(paddle.x+10, paddle.y-(paddle.height/2 -1), 10, "grey", bounceSound));
 	tiles(_level);
 	loop();
@@ -119,7 +151,7 @@ function tiles(level) {
 	level.forEach(row=> {
 		row.forEach(tile=> {
 			if(tile >= 0) {
-				tilesArr.push(new HitSquare(x,y,tileWidth,tileHeight,tileColors[tile], tile));
+				tilesArr.push(new HitTile(x,y,tileWidth,tileHeight,tileColors[tile], tile));
 			}
 			x += tileWidth;
 		})
@@ -176,7 +208,7 @@ function keyDownListeners(_ball, _paddle) {
 		_ball.go();
 	}
 	// if ball goes below bounds reset the ball on paddle
-	if(_ball.y > height) {
+	if(_ball.y > 500) {
 		if(balls.length > 1) {
 			balls.splice(balls.indexOf(_ball), 1);
 		}

@@ -17,37 +17,6 @@ class Ball {
 			this.x += this.speedX;
 			this.y += this.speedY;
 		}
-		// edge detection function to detect ball hitting passing in paddle variables
-		this.edges = (_paddle)=> {
-			const sixth = _paddle.width/6;
-			// left wall bounds detection
-			if(this.x - this.radius < 1) {this.speedX = Math.abs(this.speedX); this.sound.play()}
-			// right wall bounds detection 
-			if(this.x + this.radius > width -1) {this.speedX = -Math.abs(this.speedX); this.sound.play()}
-			// ceiling bounds detection 
-			if(this.y - this.radius < 1){ this.speedY = Math.abs(this.speedY); this.sound.play()}
-			// paddle hit detection 
-			if(this.hit(_paddle)) {
-				//change angle ball travels depending on what part of the paddle is hit
-				let diff = this.x - (_paddle.x + _paddle.width);
-				let angle = map(diff, 0, _paddle.width, -radians(45), radians(45));
-				this.speedX = this.speed * cos(angle);
-				this.speedY = this.speed * sin(angle);
-				if (this.move) {this.sound.play();}
-			}
-		}
-		// reset function to place ball back on paddle not moving;
-		this.reset = (_paddle)=> {
-			this.move = false;
-			this.x = _paddle.x +10;
-			this.y = _paddle.y -(_paddle.height/2 -1);
-			this.speedY = -3;
-			this.speedX = -3;
-		}
-
-		this.ballBounds = (_tile)=> {
-			console.log( Math.sqrt((this.x - _tile.x) * (this.x - _tile.x) + (this.y - _tile.y) * (this.y - _tile.y)) < this.width/2);
-		}
 
 	}
 	
@@ -59,6 +28,7 @@ Ball.prototype.show = function() {
 	ellipse(this.x, this.y, this.width);
 }
 
+// detect if the ball hit a rectangle
 Ball.prototype.hit = function(_paddle) {
 
 	// define vertical and horizontal distances between the ball and the square
@@ -77,5 +47,37 @@ Ball.prototype.hit = function(_paddle) {
 	let dx = distX - _paddle.width/2;
 	let dy = distY - this.height/2;
 	return ( dx*dx + dy*dy <= ( this.radius * this.radius ) );
+
+}
+
+// edge detection function to detect ball hitting passing in paddle variables
+Ball.prototype.edges = function(_paddle) {
+
+	// left wall bounds detection
+	if(this.x - this.radius < 1) {this.speedX = Math.abs(this.speedX); this.sound.play()}
+	// right wall bounds detection 
+	if(this.x + this.radius > width -1) {this.speedX = -Math.abs(this.speedX); this.sound.play()}
+	// ceiling bounds detection 
+	if(this.y - this.radius < 1){ this.speedY = Math.abs(this.speedY); this.sound.play()}
+	// paddle hit detection 
+	if(this.hit(_paddle)) {
+		//change angle ball travels depending on what part of the paddle is hit
+		let diff = this.x - (_paddle.x + _paddle.width);
+		let angle = map(diff, 0, _paddle.width, -radians(45), radians(45));
+		this.speedX = this.speed * cos(angle);
+		this.speedY = this.speed * sin(angle);
+		if (this.move) {this.sound.play();}
+	}	
+
+}
+
+// reset function to place ball back on paddle not moving;
+Ball.prototype.reset = function(_paddle) {
+
+	this.move = false;
+	this.x = _paddle.x +10;
+	this.y = _paddle.y -(_paddle.height/2 -1);
+	this.speedY = -3;
+	this.speedX = -3;
 
 }

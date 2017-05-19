@@ -19,11 +19,11 @@ Paddle.prototype.show = function() {
 }
 
 Paddle.prototype.showLives = function() {
-	let x = 5, y = 5, width = 9, height = 5
+	let x = 5, y = height - 10, w = 9, h = 5
 	for(let i = 1; i <= this.lives; i++) {
 		noStroke();
 		fill(this.color);
-		rect(5 * i * 2, y, width, height, 2, 2, 0, 0);
+		rect(5 * i * 2, y, w, h, 2, 2, 0, 0);
 	}
 }
 
