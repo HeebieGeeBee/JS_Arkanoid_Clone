@@ -49,10 +49,10 @@ function setup() {
 
 	// Create canvas
 	createCanvas(width, height);
-	
+	controls(paddle, ...balls);
 	//let controls = createCanvas(width, height/5);
 	start(level1);
-	controls(paddle, ...balls)
+	
 }
 
 /*************************/
@@ -73,6 +73,7 @@ function draw() {
 	// draw hit tiles
 	tilesArr.forEach((tile)=>tile.show());
 	// Call keyDown listeners
+
 	keyDownListeners(...balls, paddle);
 	// Call tile hit check functions
 	tileHitCheck(...balls, tilesArr, hitSound);
@@ -100,30 +101,32 @@ function draw() {
 		
 	}
 
+	controls(...balls, paddle);
+
 }
 
-function controls(_paddle, _ball) {
+function controls(_ball, _paddle) {
 
-	document.getElementById("left").addEventListener("mousedown" || "touchstart" , function(){
-		mousedown = true;
+	
+	if(mouseIsPressed && mouseX < width/2 && _paddle.x > 5) {
+		console.log('leftpressed');
 		//move paddle left
-		console.log('leftclick')
 		_paddle.x -= _paddle.speed;
 		//if ball not moving and still on paddle move ball too
 		if(!_ball.move) {
 			_ball.x = _paddle.x+10;
+		
 		}
-	})
-	document.getElementById("right").addEventListener("mousedown" || "touchstart", function(){
-		mousedown = true;
-		console.log('rightclick');
+	}
+	if(mouseIsPressed && mouseX > width/2 && _paddle.x < 495 - _paddle.width) {
+		console.log('rightpressed');
 		//move paddle right
 		_paddle.x += _paddle.speed;
 		//if ball not moving and still on paddle move ball too
 		if(!_ball.move) {
 			_ball.x = _paddle.x+10;
 		}
-	})
+	}
 }
 
 
