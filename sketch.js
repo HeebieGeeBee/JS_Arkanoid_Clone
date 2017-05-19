@@ -104,7 +104,7 @@ function draw() {
 
 function controls(_paddle, _ball) {
 
-	document.getElementById("left").addEventListener("mousedown", function(){
+	document.getElementById("left").addEventListener("mousedown" || "touchstart" , function(){
 		mousedown = true;
 		//move paddle left
 		console.log('leftclick')
@@ -114,7 +114,7 @@ function controls(_paddle, _ball) {
 			_ball.x = _paddle.x+10;
 		}
 	})
-	document.getElementById("right").addEventListener("mousedown", function(){
+	document.getElementById("right").addEventListener("mousedown" || "touchstart", function(){
 		mousedown = true;
 		console.log('rightclick');
 		//move paddle right
