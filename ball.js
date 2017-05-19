@@ -5,7 +5,7 @@ class Ball {
 		this.y = _y;
 		this.width = _width;
 		this.color = _color || "white";
-		this.speed = 4;
+		this.speed = height/120;
 		this.speedY;
 		this.speedX;
 		this.move = false;
@@ -75,9 +75,7 @@ Ball.prototype.edges = function(_paddle) {
 Ball.prototype.reset = function(_paddle) {
 
 	this.move = false;
-	this.x = _paddle.x +10;
-	this.y = _paddle.y -(_paddle.height/2 -1);
-	this.speedY = -3;
-	this.speedX = -3;
+	this.x = _paddle.x + _paddle.width/4;
+	this.y = paddle.y-(paddle.height/2 -1);
 
 }

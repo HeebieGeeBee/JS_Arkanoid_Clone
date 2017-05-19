@@ -20,8 +20,8 @@ let paused = false;
 // tile colors 
 let tileColors = ["gold" ,"silver", "red", "green", "blue", "purple",];
 // width and height varables
-let width = 500;
-let height = 700;
+let width = window.innerHeight/1.77;
+let height =window.innerHeight;
 // hit sound
 let hitSound;
 let bounceSound;
@@ -31,6 +31,14 @@ let rightDown = false;
 let leftDown = false;
 let left;
 let right;
+
+function wp(num) {
+	return width/num * 100;
+}
+
+function hp(num) {
+	return height/num * 100;
+}
 /****************************/
 /*  P5.js Preload Function  */
 /*__________________________*/
@@ -48,9 +56,10 @@ function preload() {
 
 
 function setup() {
-
+	//screen.orientation.lock('portrait-primary');
 	// Create canvas
-	createCanvas(width, height);
+	createCanvas(wp(100), hp(100));
+	frameRate(60);
 	controls(paddle, ...balls);
 	//let controls = createCanvas(width, height/5);
 	start(level1);
@@ -81,7 +90,7 @@ function draw() {
 	tileHitCheck(...balls, tilesArr, hitSound);
 	
 	if(paused) {
-		textSize(40);
+		textSize(hp(1));
 		textAlign(CENTER);
 		textFont("Arial");
 		fill('silver');
@@ -114,24 +123,32 @@ function draw() {
 function drawControls() {
 	noFill();
 	stroke('silver');
-	strokeWeight(5);
-	ellipse(width/4 - 20, height-100, 160);
-	strokeWeight(2);
+	strokeWeight(width/100);
+	ellipse(width/4, height-(height/7), width/3);
+	//strokeWeight(width/200);
 	textAlign(CENTER);
-	textSize(45);
-	text("LEFT", width/4 - 20, height-85);
-	strokeWeight(5);
-	ellipse(width/4 * 3 + 20, height-100, 160);
-	strokeWeight(2);
+	textSize(width/15);
+	fill('silver');
+	noStroke();
+	text("LEFT", width/4, height-(height/8));
+	noFill();
+	stroke('silver');
+	strokeWeight(width/100);
+	ellipse(width/4 * 3, height-(height/7), width/3);
 	textAlign(CENTER);
-	textSize(45);
-	text("RIGHT", width/4 * 3 + 20, height-85);
-	strokeWeight(2);
-	ellipse(width/2, height-100, 80);
-	strokeWeight(2);
+	textSize(width/15);
+	fill('silver');
+	noStroke();
+	text("RIGHT", width/4 * 3, height-(height/8));
+	noFill();
+	stroke('silver');
+	strokeWeight(width/100);
+	ellipse(width/2, height-(height/9), width/8);
+	noStroke()
+	fill('silver');
 	textAlign(CENTER);
-	textSize(20);
-	text("START", width/2, height-92);
+	textSize(width/20);
+	text("START", width/2, height-(width/12));
 }
 
 
@@ -142,7 +159,7 @@ function drawControls() {
 
 function controls(_ball, _paddle) {
 	// if mouse pressed or touch started and within range of left control	
-	if((mouseIsPressed || touchstart) && mouseX < width/4 + 60 && _paddle.x > 5 && mouseY > 500) {
+	if((mouseIsPressed || touchstart) && mouseX < (width/4) + (width/6) && _paddle.x > width/100 && mouseY > height-(height/7) - (width/6) ) {
 		//move paddle left
 		_paddle.x -= _paddle.speed;
 		//if ball not moving and still on paddle move ball too
@@ -152,7 +169,7 @@ function controls(_ball, _paddle) {
 		}
 	}
 	// if mouse pressed or touch started and with range of right control
-	if((mouseIsPressed || touchstart) && mouseX > width/4 * 3 - 60 && _paddle.x < 495 - _paddle.width && mouseY > 500) {
+	if((mouseIsPressed || touchstart) && mouseX > (width/4 * 3) - (width/6) && _paddle.x < width - _paddle.width - width/100 && mouseY > height-(height/7) - (width/6) ) {
 		//move paddle right
 		_paddle.x += _paddle.speed;
 		//if ball not moving and still on paddle move ball too
@@ -161,7 +178,7 @@ function controls(_ball, _paddle) {
 		}
 	}
 	// if mouse pressed or touch started with in range of start button
-	if((mouseIsPressed || touchstart) && mouseX < width/2 + 40 && mouseX > width/2 - 40 && mouseY > height - 140 && mouseY < height - 60) {
+	if((mouseIsPressed || touchstart) && mouseX < width/2 + width/16 && mouseX > width/2 - width/16 && mouseY > height - 140 && mouseY < height - 60) {
 		//set ball move to true 
 		_ball.move = true;
 	}
@@ -193,8 +210,8 @@ function start(_level) {
 	tilesArr.splice(0);
 	balls.splice(0);
 	paused = false;
-	paddle = new Paddle(width/2, height - 240 , 50, 10);
-	balls.push(new Ball(paddle.x+10, paddle.y-(paddle.height/2 -1), 10, "grey", bounceSound));
+	paddle = new Paddle(width/2, height/100 * 60 , width/10, width/60, "red");
+	balls.push(new Ball(paddle.x+paddle.width/4, paddle.y-(paddle.height/2 -1), width/40, "grey", bounceSound));
 	tiles(_level);
 	loop();
 }
@@ -204,7 +221,7 @@ function start(_level) {
 /*___________________________*/
 
 function tiles(level) {
-	let x = 5; let y = 50; let tileWidth = (width-10)/level[0].length; let tileHeight = (height-200)/30;
+	let x = 0; let y = height/20; let tileWidth = width/level[0].length; let tileHeight = height/40;
 	level.forEach(row=> {
 		row.forEach(tile=> {
 			if(tile >= 0) {
@@ -212,7 +229,7 @@ function tiles(level) {
 			}
 			x += tileWidth;
 		})
-		x = 5;
+		x = 0;
 		y += tileHeight;
 	})
 }
@@ -231,6 +248,7 @@ function tileHitCheck(_ball, _tileArray, _hitSound) {
 			tile.health > 1 ? tile.health-- : tile.health === 0 ? tile : _tileArray.splice(index, 1);
 			//change ball direction
 			tile.hitFrom(_ball);
+			console.log(tile.hitFrom(_ball));
 		}
 	})
 }
@@ -242,7 +260,7 @@ function tileHitCheck(_ball, _tileArray, _hitSound) {
 function keyDownListeners(_ball, _paddle) {
 
 		// event listener for left arrow
-	if(keyIsDown(LEFT_ARROW) && _paddle.x > 5) {
+	if(keyIsDown(LEFT_ARROW) && _paddle.x > width/100) {
 		//move paddle left
 		_paddle.x -= _paddle.speed;
 		//if ball not moving and still on paddle move ball too
@@ -251,7 +269,7 @@ function keyDownListeners(_ball, _paddle) {
 		}
 	}
 	// event listener for right arrow
-	if(keyIsDown(RIGHT_ARROW) && _paddle.x < 495 - _paddle.width) {
+	if(keyIsDown(RIGHT_ARROW) && _paddle.x < width - _paddle.width - width/100) {
 		//move paddle right
 		_paddle.x += _paddle.speed;
 		//if ball not moving and still on paddle move ball too
@@ -265,7 +283,7 @@ function keyDownListeners(_ball, _paddle) {
 		_ball.go();
 	}
 	// if ball goes below bounds reset the ball on paddle
-	if(_ball.y > 500) {
+	if(_ball.y > (height/100 * 64) ){
 		if(balls.length > 1) {
 			balls.splice(balls.indexOf(_ball), 1);
 		}

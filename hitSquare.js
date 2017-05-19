@@ -51,11 +51,11 @@ HitTile.prototype.hitFrom = function(_ball) {
 		_ball.speedX = Math.abs(_ball.speedX);
 		return "RIGHT";
 	}
-	if(_ball.y < this.y) {
+	if(_ball.y < this.y + (this.height/4)) {
 		_ball.speedY = -Math.abs(_ball.speedY); 
 		return "TOP";
 	}
-	if(_ball.y > this.y + this.height) {
+	if(_ball.y > this.y - this.height/4) {
 		_ball.speedY = Math.abs(_ball.speedY);
 		return "BOTTOM";
 	}

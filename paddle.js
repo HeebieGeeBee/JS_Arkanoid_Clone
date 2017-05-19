@@ -2,12 +2,12 @@ class Paddle {
 	constructor(_x, _y, _width, _height, _color) {
 		// Paddle variables
 		this.y = _y;
-		this.color = _color || "red";
-		this.width = _width || 20;
-		this.height = _height || 5;
+		this.color = _color;
+		this.width = _width;
+		this.height = _height;
 		this.x = _x - this.width/2;
 		this.lives = 3;
-		this.speed = 4;
+		this.speed = height/120;
 	}
 
 }
@@ -20,11 +20,12 @@ Paddle.prototype.show = function() {
 }
 
 Paddle.prototype.showLives = function() {
-	let x = 5, y = height - 210, w = 9, h = 5
+	let y = this.y + width/10, w = this.width/2, x = this.width/3, h = this.height/2;
 	for(let i = 1; i <= this.lives; i++) {
 		noStroke();
 		fill(this.color);
-		rect(5 * i * 2, y, w, h, 2, 2, 0, 0);
+		rect( (w * i) * 1.2, y, w, h, 2, 2, 0, 0);
+		 
 	}
 }
 
