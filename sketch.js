@@ -175,11 +175,13 @@ function controls(_ball, _paddle) {
 function touchStarted() {
 	//if touch started set touchstart variable to true
 	touchstart = true;
+	return false;
 }
 
 function touchEnded() {
 	//if touch ended set touchstart variable to false 
 	touchstart = false;
+	return false;
 }
 
 
