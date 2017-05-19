@@ -181,7 +181,7 @@ function touchStarted() {
 function touchEnded() {
 	//if touch ended set touchstart variable to false 
 	touchstart = false;
-	return false;
+	//return false;
 }
 
 
