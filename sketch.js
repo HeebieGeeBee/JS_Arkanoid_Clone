@@ -120,7 +120,6 @@ function draw() {
 	}
 
 	drawControls();
-	console.log(running);
 }
 	
 	
@@ -166,8 +165,7 @@ function drawControls() {
 /*_____________________________*/
 
 function touchStarted() {
-/*	
-	if(running) {
+	
 		// if mouse pressed or touch started and within range of left control	
 		if(mouseX < (width/4) + (width/6) && paddle.x > width/100 && mouseY > height-(height/7) - (width/6) ) {
 			//move paddle left
@@ -183,33 +181,38 @@ function touchStarted() {
 			//move paddle right
 			paddle.x += paddle.speed;
 			//if ball not moving and still on paddle move ball too
-			if(balls[0].move) {
+			if(!balls[0].move) {
 				balls[0].x = paddle.x+10;
 			}
 		}
 		
-	}
-*/
+	
+
 	if(mouseX < width/2 + width/16 && mouseX > width/2 - width/16 && mouseY > height - 140 && mouseY < height - 60) {
 		if(!paused && !running) {
-			start(level1);		
+			console.log('run1');
+			start(level1);	
+			running =  true;
+			balls[0].move = true;
 		}
-		else if (running && !paused)	{
+		/*else if (running && !paused)	{
+			console.log('run2');
 			noLoop();
 			paused = true;
 		}
 		else if (running && paused) {
+			console.log('run3');
 			loop();
 			paused = false;
-		} 
-		else if (running) {
-			//set ball move to true 
-			balls[0].move = true;	
+		} */
+		else if(running) {
+			balls[0].move = true;
 		}
+
 	}	
 	
 	
-	//return false;
+	return false;
 }
 
 function touchEnded() {
