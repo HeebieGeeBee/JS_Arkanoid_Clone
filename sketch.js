@@ -135,32 +135,28 @@ window.onresize = function() {
 function drawControls() {
 	noFill();
 	stroke('silver');
+	// pause and fullscreen boxes
+	strokeWeight(width/300);
+	rect(width - width/4, 0, width/4, width/14, 0, 0, 0, width/100); //fullscreen
+	rect(0, 0, width/4, width/14, 0, 0, width/100, 0); //pause
+	// left, right and go circles
 	strokeWeight(width/100);
-	ellipse(width/4, height-(height/7), width/3);
-	//strokeWeight(width/200);
+	ellipse(width/4, height-(height/7), width/3); //left
+	ellipse(width/4 * 3, height-(height/7), width/3); //right
+	ellipse(width/2, height-(height/9), width/8); //go
+	//controls text
 	textAlign(CENTER);
 	textSize(width/15);
 	fill('silver');
 	noStroke();
-	text("LEFT", width/4, height-(height/8));
-	noFill();
-	stroke('silver');
-	strokeWeight(width/100);
-	ellipse(width/4 * 3, height-(height/7), width/3);
-	textAlign(CENTER);
-	textSize(width/15);
-	fill('silver');
-	noStroke();
-	text("RIGHT", width/4 * 3, height-(height/8));
-	noFill();
-	stroke('silver');
-	strokeWeight(width/100);
-	ellipse(width/2, height-(height/9), width/8);
-	noStroke()
-	fill('silver');
-	textAlign(CENTER);
+	text("LEFT", width/4, height-(height/8));  //left
+	text("RIGHT", width/4 * 3, height-(height/8));  //right
 	textSize(width/20);
-	text("START", width/2, height-(width/12));
+	text("GO", width/2, height-(width/5.5)); //start
+	textSize(width/30);
+	text('FULLSCREEN', width - width/8, width/22);  //fullscreen
+	text('PAUSE', width/8, width/22);  //pause
+
 }
 
 
@@ -170,16 +166,17 @@ function drawControls() {
 
 function touchStarted() {
 	touchstart = true;
-	
+	/*
 		// if mouse pressed or touch started and within range of left control	
 		if(mouseX < (width/4) + (width/6) && paddle.x > width/100 && mouseY > height-(height/7) - (width/6) ) {
 			//move paddle left
 			paddle.x -= paddle.speed;
 			//if ball not moving and still on paddle move ball too
 			if(!balls[0].move) {
-				balls[0].x = paddle.x+10;
+				balls[0].x = paddle.x+paddle.width/4;
 		
 			}
+			return false
 		}
 		// if mouse pressed or touch started and with range of right control
 		if(mouseX > (width/4 * 3) - (width/6) && paddle.x < width - paddle.width - width/100 && mouseY > height-(height/7) - (width/6) ) {
@@ -187,37 +184,45 @@ function touchStarted() {
 			paddle.x += paddle.speed;
 			//if ball not moving and still on paddle move ball too
 			if(!balls[0].move) {
-				balls[0].x = paddle.x+10;
+				balls[0].x = paddle.x+paddle.width/4;
 			}
+			return false
 		}
 		
-	
+	*/
 
 	if(mouseX < width/2 + width/16 && mouseX > width/2 - width/16 && mouseY > height - 140 && mouseY < height - 60) {
 		if(!paused && !running) {
-			console.log('run1');
+			
 			start(level1);	
 			running =  true;
 			balls[0].move = true;
 		}
-		/*else if (running && !paused)	{
-			console.log('run2');
-			noLoop();
-			paused = true;
-		}
-		else if (running && paused) {
-			console.log('run3');
-			loop();
-			paused = false;
-		} */
 		else if(running) {
 			balls[0].move = true;
 		}
+		return false
 
 	}	
 	
+	if(mouseX > width - width/4 && mouseY < width/14) {
+		
+		var fs = fullscreen();
+    	fullscreen(!fs);
+    	return false
+	}
+
+	if(mouseX < width/4 && mouseY < width/14) {
+		if(paused) {
+				loop();	
+				paused = false;
+			} else {
+				noLoop();
+				paused = true;
+			} 
+	}
 	
-	return false;
+	
 }
 
 function touchEnded() {
@@ -288,7 +293,7 @@ function keyDownListeners(_ball, _paddle) {
 		_paddle.x -= _paddle.speed;
 		//if ball not moving and still on paddle move ball too
 		if(!_ball.move) {
-			_ball.x = _paddle.x+10;
+			_ball.x = _paddle.x+_paddle.width/4;
 		}
 	}
 	// event listener for right arrow
@@ -297,7 +302,7 @@ function keyDownListeners(_ball, _paddle) {
 		_paddle.x += _paddle.speed;
 		//if ball not moving and still on paddle move ball too
 		if(!_ball.move) {
-			_ball.x = _paddle.x+10;
+			_ball.x = _paddle.x+_paddle.width/4;
 		}
 	}
 
