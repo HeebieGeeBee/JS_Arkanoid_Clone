@@ -94,6 +94,7 @@ function draw() {
 		balls[0].go();
 	}
 	
+
 	if(paused) {
 		textSize(width/15);
 		textAlign(CENTER);
@@ -141,16 +142,14 @@ function drawControls() {
 	rect(0, 0, width/4, width/14, 0, 0, width/100, 0); //pause
 	// left, right and go circles
 	strokeWeight(width/100);
-	ellipse(width/4, height-(height/7), width/3); //left
-	ellipse(width/4 * 3, height-(height/7), width/3); //right
 	ellipse(width/2, height-(height/9), width/8); //go
 	//controls text
 	textAlign(CENTER);
-	textSize(width/15);
+	textSize(width/5);
 	fill('silver');
 	noStroke();
-	text("LEFT", width/4, height-(height/8));  //left
-	text("RIGHT", width/4 * 3, height-(height/8));  //right
+	text("\u25c4", width/5, height-(height/8));  //left
+	text("\u25ba", width/5 * 4, height-(height/8));  //right
 	textSize(width/20);
 	text("GO", width/2, height-(width/5.5)); //start
 	textSize(width/30);
@@ -192,13 +191,14 @@ function touchStarted() {
 	*/
 
 	if(mouseX < width/2 + width/16 && mouseX > width/2 - width/16 && mouseY > height - 140 && mouseY < height - 60) {
-		if(!paused && !running) {
-			
-			start(level1);	
+		if(!running) {
+			console.log('start 1')
+			start(level1);			
 			running =  true;
-			balls[0].move = true;
+			
 		}
 		else if(running) {
+			console.log('start 2')
 			balls[0].move = true;
 		}
 		return false
@@ -238,6 +238,7 @@ function start(_level) {
 	tilesArr.splice(0);
 	balls.splice(0);
 	paused = false;
+	running = true;
 	paddle = new Paddle(width/2, height/100 * 60 , width/10, width/60, "red");
 	balls.push(new Ball(paddle.x+paddle.width/4, paddle.y-(paddle.height/2 -1), width/40, "grey", bounceSound));
 	tiles(_level);
@@ -334,13 +335,16 @@ function keyDownListeners(_ball, _paddle) {
 			_ball.x = _paddle.x+10;
 		}
 	}
+/*
 	// if mouse pressed or touch started with in range of start button
 	if((mouseIsPressed || touchstart) && mouseX < width/2 + width/16 && mouseX > width/2 - width/16 && mouseY > height - 140 && mouseY < height - 60) {
 		//set ball move to true 
 		_ball.move = true;
 		running = true;
+		console.log('start here too?')
 	}
-	
+*/
+
 }
 
 
