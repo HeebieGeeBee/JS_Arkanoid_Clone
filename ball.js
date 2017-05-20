@@ -17,9 +17,7 @@ class Ball {
 			this.x += this.speedX;
 			this.y += this.speedY;
 		}
-
-	}
-	
+	}	
 } 
 
 // show function to render ball to canvas
@@ -30,7 +28,6 @@ Ball.prototype.show = function() {
 
 // detect if the ball hit a rectangle
 Ball.prototype.hit = function(_paddle) {
-
 	// define vertical and horizontal distances between the ball and the square
 	let distX = Math.abs(this.x - _paddle.x - _paddle.width/2  );
 	let distY = Math.abs(this.y - _paddle.y - _paddle.height/2  );
@@ -47,12 +44,10 @@ Ball.prototype.hit = function(_paddle) {
 	let dx = distX - _paddle.width/2;
 	let dy = distY - this.height/2;
 	return ( dx*dx + dy*dy <= ( this.radius * this.radius ) );
-
 }
 
 // edge detection function to detect ball hitting passing in paddle variables
 Ball.prototype.edges = function(_paddle) {
-
 	// left wall bounds detection
 	if(this.x - this.radius < 1) {this.speedX = Math.abs(this.speedX); this.sound.play()}
 	// right wall bounds detection 
@@ -68,14 +63,11 @@ Ball.prototype.edges = function(_paddle) {
 		this.speedY = this.speed * sin(angle);
 		if (this.move) {this.sound.play();}
 	}	
-
 }
 
 // reset function to place ball back on paddle not moving;
 Ball.prototype.reset = function(_paddle) {
-
 	this.move = false;
 	this.x = _paddle.x + _paddle.width/4;
 	this.y = paddle.y-(paddle.height/2 -1);
-
 }

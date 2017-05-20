@@ -10,7 +10,6 @@ class HitTile {
 		this.health = this.id === 1 ? 2 : this.id === 0 ? 0 : 1;
 	}
 }
-
 // show function to draw square instances
 HitTile.prototype.show = function() {
 	strokeWeight(1);
@@ -18,9 +17,8 @@ HitTile.prototype.show = function() {
 	fill(this.color);
 	rect(this.x, this.y, this.width, this.height, 2, 2, 2, 2);
 }
-
+// hit detection function
 HitTile.prototype.hit = function(_ball) {
-
 	// define vertical and horizontal distances between the ball and the square
 	let distX = Math.abs(_ball.x - this.x - this.width/2  );
 	let distY = Math.abs(_ball.y - this.y - this.height/2  );
@@ -37,11 +35,9 @@ HitTile.prototype.hit = function(_ball) {
 	let dx = distX - this.width/2;
 	let dy = distY - this.height/2;
 	return ( dx*dx + dy*dy <= ( _ball.radius * _ball.radius ) );
-
 }
-
+// hit from function
 HitTile.prototype.hitFrom = function(_ball) {
-
 	// detect what direction the ball was hit from 
 	if(_ball.x < this.x && _ball.y > this.y && _ball.y < this.y + this.height) {
 		_ball.speedX = -Math.abs(_ball.speedX);
@@ -59,6 +55,4 @@ HitTile.prototype.hitFrom = function(_ball) {
 		_ball.speedY = Math.abs(_ball.speedY);
 		return "BOTTOM";
 	}
-
-
 }
