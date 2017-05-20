@@ -33,13 +33,7 @@ let left;
 let right;
 let running = false;
 
-function wp(num) {
-	return width/num * 100;
-}
 
-function hp(num) {
-	return height/num * 100;
-}
 /****************************/
 /*  P5.js Preload Function  */
 /*__________________________*/
@@ -113,7 +107,6 @@ function draw() {
 			fill('silver');
 			textStyle(BOLD);
 			text("GAMEOVER", width/2, height/2);
-			text("Press S to Restart", width/2, height/2 + width/15);
 			running = false;
 			noLoop();
 		},100)
